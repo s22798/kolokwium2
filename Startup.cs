@@ -2,9 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using kolokwium2.Models;
+using kolokwium2.Services.AlbumService;
+using kolokwium2.Services.MusicianService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +30,9 @@ namespace kolokwium2
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddDbContext<MainDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.AddScoped<IAlbumDbService, AlbumDbService>();
+            services.AddScoped<IMusicianDbService, MusicianDbService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
