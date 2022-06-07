@@ -9,5 +9,6 @@ namespace kolokwium2.Services.MusicianService
     {
         Task DeleteMusician(int idMusician);
         Task<bool> IfMusiciansTrackInAnyAlbum(int idMusician);
+        Task<bool> IfMusicianExists(int idMusician);
     }
 }

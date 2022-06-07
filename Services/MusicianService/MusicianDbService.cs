@@ -1,4 +1,5 @@
 ﻿using kolokwium2.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +21,15 @@ namespace kolokwium2.Services.MusicianService
             try
             {
                 var mus = new Musician() { IdMusician = idMusician };
-                _mainDbContext.Musicians.Attach(mus);
+                _mainDbContext.Attach(mus);
                 _mainDbContext.Remove(mus);
 
                 await _mainDbContext.SaveChangesAsync();
 
                 var mus2 = new MusicianTrack { IdMusician = idMusician };
-                _mainDbContext.MusicianTracks.Attach(mus2);
+                _mainDbContext.Attach(mus2);
                 _mainDbContext.Remove(mus);
+
                 await _mainDbContext.SaveChangesAsync();
 
                 transaction.Commit();
@@ -38,10 +40,14 @@ namespace kolokwium2.Services.MusicianService
             }
         }
 
+        public async Task<bool> IfMusicianExists(int idMusician)
+        {
+            return await _mainDbContext.Musicians.Where(e=> e.IdMusician == idMusician).AnyAsync();
+        }
 
         public async Task<bool> IfMusiciansTrackInAnyAlbum(int idMusician)
         {
-            throw new NotImplementedException();
+            return await _mainDbContext.Tracks.Where(e => e.IdTrack == e.MusicianTracks.FirstOrDefault(e => e.IdMusician == idMusician).IdTrack).AnyAsync();
         }
     }
 }

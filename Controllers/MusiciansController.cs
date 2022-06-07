@@ -22,7 +22,8 @@ namespace kolokwium2.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteMusician(int idMusic)
         {
-            if (!await _musicianDbService.IfMusiciansTrackInAnyAlbum(idMusic)) return BadRequest();
+            if (!await _musicianDbService.IfMusicianExists(idMusic)) return NotFound("Musician not found");
+            if (!await _musicianDbService.IfMusiciansTrackInAnyAlbum(idMusic)) return BadRequest("Very bad request");
             await _musicianDbService.DeleteMusician(idMusic);
             return Ok("Deleted musician");
         }
