@@ -22,7 +22,7 @@ namespace kolokwium2.Controllers
         public async Task<IActionResult> GetAlbumAndTracks(int idAlbum)
         {
             if (!await _albumdbService.IfAlbumExists(idAlbum)) return NotFound("Album not fuond");
-            var alb = _albumdbService.GetAlbum(idAlbum);
+            var alb = await _albumdbService.GetAlbum(idAlbum);
             return Ok(alb);
         }
 
